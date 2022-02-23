@@ -4,4 +4,6 @@ Eclipse_WS/.metadata
 Eclipse_WS/apiautomation/.settings
 Eclipse_WS/apiautomation/.classpath
 Eclipse_WS/apiautomation/bin
-Eclipse_WS/apiautomation/.project
+Eclipse_WS/apiautomation/.projec
+Eclipse_WS/apiautomation/target/
+Eclipse_WS/apiautomation/test-output/

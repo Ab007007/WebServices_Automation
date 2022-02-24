@@ -1,15 +1,24 @@
-package com.synechron.rest.apiautomation.tests;
+package com.synechron.rest.apiautomation.spec;
 
-import static org.hamcrest.CoreMatchers.*;
+import static io.restassured.RestAssured.basePath;
+import static io.restassured.RestAssured.baseURI;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
+
+import org.apache.http.client.methods.RequestBuilder;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import static io.restassured.RestAssured.*;
-import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
+import com.synechron.rest.apiautomation.tests.GlobalVariables;
 
-public class StaticImportBoardTest extends GlobalVariables
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.RequestSpecification;
+
+public class RequestSpec extends GlobalVariables
 {
+	RequestSpecification reqSpec;
+	RequestSpecBuilder reqBuilder;
 	
 	public static String boardID ;
 	public static String boardIdentification ;
@@ -20,6 +29,13 @@ public class StaticImportBoardTest extends GlobalVariables
 	public void setGlobals(){
 		baseURI = uri;
 		basePath = "/1/boards/";
+		reqBuilder = new RequestSpecBuilder();
+		reqBuilder.addQueryParam("key", key);
+		reqBuilder.addQueryParam("token", token);
+		reqBuilder.addQueryParam("name", boardName);
+		reqBuilder.setContentType("text/plain");
+		
+		reqSpec = reqBuilder.build();
 	}
 	
 	
@@ -28,8 +44,7 @@ public class StaticImportBoardTest extends GlobalVariables
 	{
 		System.out.println("Get Board Started");
 		given().
-			param("key", key).
-			param("token", token).
+			spec(reqSpec).
 		when().
 			get(boardIdentification).
 		then().
@@ -45,10 +60,7 @@ public class StaticImportBoardTest extends GlobalVariables
 		
 		ValidatableResponse validateResponse = 
 			given().
-				queryParam("key", key).
-				queryParam("token", token).
-				queryParam("name",boardName).
-				header("Content-Type", "application/json").
+				spec(reqSpec).
 			when().
 				post().then();
 		
@@ -65,10 +77,7 @@ public class StaticImportBoardTest extends GlobalVariables
 	public void updateBoard() {
 		
 			given().
-				queryParam("key", key).
-				queryParam("token", token).
-				queryParam("name",boardName).
-				header("Content-Type", "application/json").
+				spec(reqSpec).
 			when().
 				put(boardID).
 			then().
@@ -81,10 +90,7 @@ public class StaticImportBoardTest extends GlobalVariables
 	public void deleteBoard() {
 		
 			given().
-				queryParam("key", key).
-				queryParam("token", token).
-				queryParam("name",boardName).
-				header("Content-Type", "application/json").
+				spec(reqSpec).	
 			when().
 				delete(boardID).
 			then().
